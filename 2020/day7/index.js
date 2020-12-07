@@ -1,4 +1,3 @@
-const { match } = require('assert')
 const fs = require('fs')
 
 const RULES = fs.readFileSync('./day7/rules', 'utf-8')
@@ -17,8 +16,10 @@ const parseRule = (rule) => {
                 .split(' ')
             const quantity = formatted[0]
             const type = formatted.slice(1).join(' ')
-            return { quantity, type }
+            if (quantity === 'no') return null // contains no other bags
+            return { quantity: Number(quantity), type }
         })
+        .filter(Boolean) // remove null (bags that contain no other bags)
     return {
         outerBag,
         contents
@@ -39,7 +40,7 @@ const getBagsThatCanHoldThisType = (type) => {
         const matchingContains = PARSED_RULES[rule].filter(r => r.type === type)
         if (matchingContains.length > 0) bags.push({
             type: rule,
-            quantity: matchingContains.reduce((acc, cv) => {return acc + Number(cv.quantity)}, 0)
+            quantity: matchingContains.reduce((acc, cv) => {return acc + cv.quantity}, 0)
         })
     }
     return bags
@@ -61,4 +62,32 @@ const recursivelyGetBagsThatCanHoldThisType = (type) => {
 
 recursivelyGetBagsThatCanHoldThisType('shiny gold')
 console.log('Part 1: ', uniqueBagsCounted.size)
-// console.log('Part 2: ', counter)
+
+
+// let total = 0
+const getQuantityOfBagsInside = (bagType) => {
+    const bagsInside = PARSED_RULES[bagType]
+    if (bagsInside.length === 0) return 0
+    // console.log(bagsInside)
+
+    let total = 0
+    for (const bag of bagsInside) {
+        // if (numBagsInside.length === 0) {
+        //     total += Number(bag.quantity)
+        // } else {
+            // console.log(bag.type, numBagsInside, Number(bag.quantity), numBagsInside * Number(bag.quantity))
+            total += bag.quantity + getQuantityOfBagsInside(bag.type) * bag.quantity
+        // }
+    }
+
+    return total
+}
+
+// const getQtyBagsInside = (bagType) => {
+//     if (PARSED_RULES[bagType].length)
+// }
+
+// console.log(getQuantityOfBagsInside('shiny gold'))
+// console.log(total)
+
+console.log('Part 2: ', getQuantityOfBagsInside('shiny gold'))
