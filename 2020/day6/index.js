@@ -26,7 +26,6 @@ for (const groupUniqueAnswers of eachGroupUniqueAnswers) {
 console.log('Part 1: ', totalAnswersCount)
 
 const didEveryoneAnswerYes = (group) => {
-    // console.log(Array.from(getUniqueAnswersFromGroup(group)))
     let obj = {}
     for (const uniqueAnswer of Array.from(getUniqueAnswersFromGroup(group))) {
         let didAllAnswerYes = true
@@ -37,10 +36,6 @@ const didEveryoneAnswerYes = (group) => {
     }
     return obj
 }
-
-// for (const groupUniqueAnswers of eachGroupUniqueAnswers) {
-//     const everyoneAnsweredYesToThese = didEveryoneAnswerYes(groupUniqueAnswers)
-// }
 
 const eachGroupAnswersThatEveryoneAnsweredYesTo = ANSWERS.map(groupAnswers => {
     return didEveryoneAnswerYes(groupAnswers)

@@ -3,8 +3,8 @@ const fs = require('fs')
 const RULES = fs.readFileSync('./day7/rules', 'utf-8')
     .split('\n')
 
-const TEST_RULES = fs.readFileSync('./day7/testrules', 'utf-8')
-    .split('\n')
+// const TEST_RULES = fs.readFileSync('./day7/testrules', 'utf-8')
+//     .split('\n')
 
 const parseRule = (rule) => {
     const [outerBagRaw, contentsRaw] = rule.split('contain')
@@ -32,7 +32,6 @@ const PARSED_RULES = RULES.reduce((acc, rule) => {
     return acc
 }, {})
 
-// console.log(PARSED_RULES)
 
 const getBagsThatCanHoldThisType = (type) => {
     const bags = []
@@ -64,30 +63,16 @@ recursivelyGetBagsThatCanHoldThisType('shiny gold')
 console.log('Part 1: ', uniqueBagsCounted.size)
 
 
-// let total = 0
 const getQuantityOfBagsInside = (bagType) => {
     const bagsInside = PARSED_RULES[bagType]
     if (bagsInside.length === 0) return 0
-    // console.log(bagsInside)
 
     let total = 0
     for (const bag of bagsInside) {
-        // if (numBagsInside.length === 0) {
-        //     total += Number(bag.quantity)
-        // } else {
-            // console.log(bag.type, numBagsInside, Number(bag.quantity), numBagsInside * Number(bag.quantity))
             total += bag.quantity + getQuantityOfBagsInside(bag.type) * bag.quantity
-        // }
     }
 
     return total
 }
-
-// const getQtyBagsInside = (bagType) => {
-//     if (PARSED_RULES[bagType].length)
-// }
-
-// console.log(getQuantityOfBagsInside('shiny gold'))
-// console.log(total)
 
 console.log('Part 2: ', getQuantityOfBagsInside('shiny gold'))
